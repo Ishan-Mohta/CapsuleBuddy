@@ -1,3 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capsule Buddy - Smart Medicine Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --shadow-premium: 0 32px 64px rgba(0, 0, 0, 0.25), 0 16px 32px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+            --shadow-elevated: 0 24px 48px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.12);
+            --border-premium: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
+        }
+        
+        .gradient-bg { 
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: var(--shadow-premium);
+            border-bottom: var(--border-premium);
+        }
+        
+        .card-shadow { 
+            box-shadow: var(--shadow-elevated);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: var(--border-premium);
+            background: var(--glass-bg);
+        }
+        
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: var(--border-premium);
+        }
+        .premium-card {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: var(--border-premium);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        
+        .premium-button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-button:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevated);
+        }
+        
+        .premium-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .premium-button:hover::before {
+            left: 100%;
+        }
+        
+        .pulse-animation { animation: pulse 3s ease-in-out infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        
+        .slide-in { animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes slideIn {
+            from { transform: translateY(32px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.05) rotate(2deg); }
+            70% { transform: scale(0.95) rotate(-1deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        .shake { animation: shake 0.6s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+        
+        .glow { 
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.3), 0 0 80px rgba(118, 75, 162, 0.2), 0 0 120px rgba(240, 147, 251, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        
+        .premium-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #ec4899, #f59e0b);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -33,105 +194,141 @@
 </head>
 <body class="min-h-screen">
     <!-- Header -->
-    <header class="gradient-bg text-white p-4 shadow-lg">
-        <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-white bg-opacity-20 p-2 rounded-lg">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+    <header class="gradient-bg text-white p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        <div class="max-w-7xl mx-auto flex items-center justify-between relative z-10">
+            <div class="flex items-center space-x-6">
+                <div class="premium-card p-4 bg-gradient-to-br from-white/15 to-white/5 border border-white/20 shadow-2xl">
+                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold">Capsule Buddy</h1>
-                    <p class="text-sm opacity-90">Smart Medicine Tracker</p>
+                    <h1 class="text-4xl premium-title text-white mb-1 tracking-tight">Capsule Buddy</h1>
+                    <p class="text-base text-white/80 font-medium tracking-wide">AI-Powered Medicine Intelligence</p>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <button id="emergencyBtn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition-colors">
-                    🚨 Emergency
+            <div class="flex items-center space-x-5">
+                <button id="emergencyBtn" class="premium-button px-8 py-4 rounded-2xl font-semibold text-white transition-all duration-400 transform hover:scale-105 shadow-xl hover:shadow-2xl relative overflow-hidden">
+                    <span class="relative z-10 flex items-center space-x-2">
+                        <span class="text-lg">🚨</span>
+                        <span>Emergency</span>
+                    </span>
                 </button>
-                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                    <span class="text-lg">👤</span>
+                <div class="premium-card w-14 h-14 bg-gradient-to-br from-white/15 to-white/5 border border-white/20 flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-400 cursor-pointer hover:scale-105">
+                    <span class="text-2xl">👤</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="max-w-6xl mx-auto p-6">
+    <div class="max-w-7xl mx-auto p-8">
         <!-- Quick Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <button id="scanBtn" class="bg-white card-shadow p-6 rounded-xl hover:shadow-lg hover:scale-105 hover:glow transition-all duration-300 text-center ripple group">
-                <div class="text-3xl mb-2 group-hover:bounce-in">📱</div>
-                <h3 class="font-semibold text-gray-800">Scan Medicine</h3>
-                <p class="text-sm text-gray-600">Quick barcode scan</p>
-                <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-blue-500 progress-bar" id="scanProgress"></div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <button id="scanBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">📱</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Scan Medicine</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">AI-powered recognition</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-400 to-purple-400 progress-bar transition-all duration-500" id="scanProgress"></div>
+                    </div>
                 </div>
             </button>
-            <button id="addMedBtn" class="bg-white card-shadow p-6 rounded-xl hover:shadow-lg hover:scale-105 hover:glow transition-all duration-300 text-center ripple group">
-                <div class="text-3xl mb-2 group-hover:bounce-in">💊</div>
-                <h3 class="font-semibold text-gray-800">Add Medicine</h3>
-                <p class="text-sm text-gray-600">Manual entry</p>
-                <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-green-500 progress-bar" id="addProgress"></div>
+            <button id="addMedBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">💊</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Add Medicine</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Manual entry</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-green-400 to-emerald-400 progress-bar transition-all duration-500" id="addProgress"></div>
+                    </div>
                 </div>
             </button>
-            <button id="doctorBtn" class="bg-white card-shadow p-6 rounded-xl hover:shadow-lg hover:scale-105 hover:glow transition-all duration-300 text-center ripple group">
-                <div class="text-3xl mb-2 group-hover:bounce-in">👨‍⚕</div>
-                <h3 class="font-semibold text-gray-800">Doctor Connect</h3>
-                <p class="text-sm text-gray-600">Share profile</p>
-                <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-purple-500 progress-bar" id="doctorProgress"></div>
+            <button id="doctorBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">👨‍⚕️</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Doctor Connect</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Share profile</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-purple-400 to-pink-400 progress-bar transition-all duration-500" id="doctorProgress"></div>
+                    </div>
                 </div>
             </button>
-            <button id="profileBtn" class="bg-white card-shadow p-6 rounded-xl hover:shadow-lg hover:scale-105 hover:glow transition-all duration-300 text-center ripple group">
-                <div class="text-3xl mb-2 group-hover:bounce-in">📋</div>
-                <h3 class="font-semibold text-gray-800">Health Profile</h3>
-                <p class="text-sm text-gray-600">Conditions & allergies</p>
-                <div class="mt-2 h-1 bg-gray-200 rounded-full overflow-hidden">
-                    <div class="h-full bg-orange-500 progress-bar" id="profileProgress"></div>
+            <button id="profileBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">📋</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Health Profile</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Conditions & allergies</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-orange-400 to-red-400 progress-bar transition-all duration-500" id="profileProgress"></div>
+                    </div>
                 </div>
             </button>
         </div>
 
         <!-- Main Content Area -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Today's Medicines -->
             <div class="lg:col-span-2">
-                <div class="bg-white card-shadow rounded-xl p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-xl font-bold text-gray-800">Today's Schedule</h2>
-                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">3 pending</span>
-                    </div>
-                    
-                    <div id="medicineList" class="space-y-4">
-                        <!-- Medicine items will be populated here -->
+                <div class="premium-card card-shadow p-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full -translate-y-20 translate-x-20"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-10">
+                            <div>
+                                <h2 class="text-3xl font-bold gradient-text mb-2 premium-title">Today's Schedule</h2>
+                                <p class="text-base text-white/70 font-medium">Your personalized medicine routine</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="premium-button px-6 py-3 rounded-2xl text-sm font-semibold text-white shadow-lg">3 pending</span>
+                                <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse shadow-lg"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="medicineList" class="space-y-5">
+                            <!-- Medicine items will be populated here -->
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- AI Safety Panel -->
-            <div class="space-y-6">
+            <div class="space-y-8">
                 <!-- Safety Alerts -->
-                <div class="bg-white card-shadow rounded-xl p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
-                        <span class="text-yellow-500 mr-2">⚠</span>
-                        AI Safety Check
-                    </h3>
-                    <div id="safetyAlerts" class="space-y-3">
-                        <!-- Safety alerts will be populated here -->
+                <div class="premium-card card-shadow p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full -translate-y-16 -translate-x-16"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold text-white mb-8 flex items-center premium-title">
+                            <div class="premium-card p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-400/30 mr-4 shadow-lg">
+                                <span class="text-white text-xl">🤖</span>
+                            </div>
+                            <div>
+                                <div class="gradient-text">AI Safety Monitor</div>
+                                <p class="text-sm text-white/60 font-normal">Real-time analysis</p>
+                            </div>
+                        </h3>
+                        <div id="safetyAlerts" class="space-y-5">
+                            <!-- Safety alerts will be populated here -->
+                        </div>
                     </div>
                 </div>
 
                 <!-- Health Conditions -->
-                <div class="bg-white card-shadow rounded-xl p-6">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Health Conditions</h3>
-                    <div id="conditionsList" class="space-y-2">
-                        <!-- Conditions will be populated here -->
+                <div class="premium-card card-shadow p-8 relative overflow-hidden">
+                    <div class="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-br from-green-500/10 to-blue-500/10 rounded-full translate-y-14 translate-x-14"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold gradient-text mb-8 premium-title">Health Profile</h3>
+                        <div id="conditionsList" class="space-y-4 mb-8">
+                            <!-- Conditions will be populated here -->
+                        </div>
+                        <button id="addConditionBtn" class="w-full premium-button py-4 rounded-2xl transition-all duration-400 font-semibold text-white hover:scale-105">
+                            <span class="mr-2">+</span> Add Condition
+                        </button>
                     </div>
-                    <button id="addConditionBtn" class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg transition-colors">
-                        + Add Condition
-                    </button>
                 </div>
             </div>
         </div>
@@ -143,21 +340,21 @@
     </div>
 
     <!-- Floating Action Button -->
-    <div class="fixed bottom-6 right-6 z-40">
-        <button id="floatingBtn" class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 floating group">
-            <svg class="w-6 h-6 group-hover:rotate-45 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    <div class="fixed bottom-10 right-10 z-40">
+        <button id="floatingBtn" class="premium-button p-6 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-400 floating group text-white hover:scale-110">
+            <svg class="w-8 h-8 group-hover:rotate-45 transition-transform duration-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
         </button>
-        <div id="fabMenu" class="absolute bottom-16 right-0 space-y-2 opacity-0 transform scale-0 transition-all duration-300">
-            <button class="bg-green-500 hover:bg-green-600 text-white p-3 rounded-full shadow-lg block" onclick="quickAddMedicine()">
-                <span class="text-sm">💊</span>
+        <div id="fabMenu" class="absolute bottom-24 right-0 space-y-4 opacity-0 transform scale-0 transition-all duration-400">
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickAddMedicine()">
+                <span class="text-xl">💊</span>
             </button>
-            <button class="bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-full shadow-lg block" onclick="quickScan()">
-                <span class="text-sm">📱</span>
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickScan()">
+                <span class="text-xl">📱</span>
             </button>
-            <button class="bg-red-500 hover:bg-red-600 text-white p-3 rounded-full shadow-lg block" onclick="quickEmergency()">
-                <span class="text-sm">🚨</span>
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickEmergency()">
+                <span class="text-xl">🚨</span>
             </button>
         </div>
     </div>
@@ -453,59 +650,59 @@
         function renderMedicines() {
             const container = document.getElementById('medicineList');
             container.innerHTML = medicines.map(med => `
-                <div class="border border-gray-200 rounded-lg p-4 ${med.taken ? 'bg-green-50 border-green-200' : 'bg-white'} hover:shadow-lg transition-all duration-300 hover:scale-102 group cursor-pointer" onclick="expandMedicineCard(${med.id})">
+                <div class="premium-card border border-white/10 p-6 ${med.taken ? 'bg-green-500/10 border-green-400/30' : 'bg-white/5'} hover:shadow-2xl transition-all duration-400 hover:scale-102 group cursor-pointer" onclick="expandMedicineCard(${med.id})">
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
-                            <div class="flex items-center space-x-3">
-                                <div class="text-2xl group-hover:bounce-in">${med.taken ? '✅' : '💊'}</div>
+                            <div class="flex items-center space-x-4">
+                                <div class="text-3xl group-hover:bounce-in">${med.taken ? '✅' : '💊'}</div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-800 flex items-center">
+                                    <h4 class="font-semibold text-white text-lg flex items-center premium-title">
                                         ${med.name}
-                                        <span class="ml-2 px-2 py-1 text-xs rounded-full transition-all duration-300 ${
-                                            med.aiSafetyScore >= 90 ? 'bg-green-100 text-green-800 group-hover:bg-green-200' :
-                                            med.aiSafetyScore >= 80 ? 'bg-yellow-100 text-yellow-800 group-hover:bg-yellow-200' :
-                                            'bg-red-100 text-red-800 group-hover:bg-red-200'
+                                        <span class="ml-3 px-3 py-1 text-xs rounded-full transition-all duration-400 ${
+                                            med.aiSafetyScore >= 90 ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                                            med.aiSafetyScore >= 80 ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                                            'bg-red-400/20 text-red-300 border border-red-400/30'
                                         }">
                                             AI: ${med.aiSafetyScore}%
                                         </span>
                                     </h4>
-                                    <p class="text-sm text-gray-600">${med.dosage} at ${med.time}</p>
-                                    <div class="mt-1 h-1 bg-gray-200 rounded-full overflow-hidden">
-                                        <div class="h-full bg-blue-500 transition-all duration-500" style="width: ${med.aiSafetyScore}%"></div>
+                                    <p class="text-sm text-white/70 font-medium">${med.dosage} at ${med.time}</p>
+                                    <div class="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-500" style="width: ${med.aiSafetyScore}%"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="event.stopPropagation(); runAISafetyCheck(${med.id})" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded text-xs transition-all duration-300 hover:scale-105 ripple">
+                        <div class="flex items-center space-x-3">
+                            <button onclick="event.stopPropagation(); runAISafetyCheck(${med.id})" class="premium-button px-4 py-2 rounded-xl text-xs transition-all duration-400 hover:scale-105 text-white">
                                 🤖 AI Check
                             </button>
                             ${!med.taken ? `
-                                <button onclick="event.stopPropagation(); takeMedicine(${med.id})" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-all duration-300 hover:scale-105 ripple pulse-animation">
+                                <button onclick="event.stopPropagation(); takeMedicine(${med.id})" class="premium-button px-6 py-3 rounded-xl text-sm transition-all duration-400 hover:scale-105 pulse-animation text-white font-semibold">
                                     Take Now
                                 </button>
                             ` : `
-                                <span class="text-green-600 text-sm font-medium bounce-in">✓ Taken</span>
+                                <span class="text-green-400 text-sm font-semibold bounce-in">✓ Taken</span>
                             `}
-                            <button onclick="event.stopPropagation(); showMedicineDetails(${med.id})" class="text-blue-600 hover:text-blue-800 text-sm transition-colors">
+                            <button onclick="event.stopPropagation(); showMedicineDetails(${med.id})" class="text-blue-400 hover:text-blue-300 text-sm transition-colors font-medium">
                                 Details
                             </button>
                         </div>
                     </div>
-                    <div id="medicineDetails${med.id}" class="mt-3 overflow-hidden transition-all duration-300" style="max-height: 0;">
+                    <div id="medicineDetails${med.id}" class="mt-4 overflow-hidden transition-all duration-400" style="max-height: 0;">
                         ${med.sideEffects.length > 0 ? `
-                            <div class="text-xs text-gray-500 mb-2">
-                                <strong>Side effects:</strong> ${med.sideEffects.join(', ')}
+                            <div class="text-xs text-white/60 mb-3 font-medium">
+                                <strong class="text-white/80">Side effects:</strong> ${med.sideEffects.join(', ')}
                             </div>
                         ` : ''}
-                        <div class="text-xs text-gray-400">
+                        <div class="text-xs text-white/50 mb-3">
                             Last AI check: ${new Date(med.lastAiCheck).toLocaleString()}
                         </div>
-                        <div class="mt-2 flex space-x-2">
-                            <button onclick="event.stopPropagation(); editMedicine(${med.id})" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded text-xs transition-colors">
+                        <div class="flex space-x-3">
+                            <button onclick="event.stopPropagation(); editMedicine(${med.id})" class="premium-button px-3 py-2 rounded-xl text-xs transition-all duration-400 text-white">
                                 Edit
                             </button>
-                            <button onclick="event.stopPropagation(); setReminder(${med.id})" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-2 py-1 rounded text-xs transition-colors">
+                            <button onclick="event.stopPropagation(); setReminder(${med.id})" class="premium-button px-3 py-2 rounded-xl text-xs transition-all duration-400 text-white">
                                 Remind
                             </button>
                         </div>
@@ -517,20 +714,20 @@
         function renderSafetyAlerts() {
             const container = document.getElementById('safetyAlerts');
             container.innerHTML = safetyAlerts.map(alert => `
-                <div class="border-l-4 ${alert.severity === 'warning' ? 'border-yellow-400 bg-yellow-50' : 'border-blue-400 bg-blue-50'} p-3 rounded">
+                <div class="premium-card border-l-4 ${alert.severity === 'warning' ? 'border-yellow-400/60 bg-yellow-500/10' : 'border-blue-400/60 bg-blue-500/10'} p-4 border border-white/10">
                     <div class="flex items-start justify-between">
-                        <p class="text-sm ${alert.severity === 'warning' ? 'text-yellow-800' : 'text-blue-800'} flex-1">${alert.message}</p>
-                        <div class="ml-2 text-xs">
-                            <span class="px-2 py-1 rounded-full ${
-                                alert.confidence >= 90 ? 'bg-green-100 text-green-700' :
-                                alert.confidence >= 70 ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-red-100 text-red-700'
+                        <p class="text-sm ${alert.severity === 'warning' ? 'text-yellow-200' : 'text-blue-200'} flex-1 font-medium">${alert.message}</p>
+                        <div class="ml-3 text-xs">
+                            <span class="px-3 py-1 rounded-full ${
+                                alert.confidence >= 90 ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                                alert.confidence >= 70 ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                                'bg-red-400/20 text-red-300 border border-red-400/30'
                             }">
                                 ${alert.confidence}%
                             </span>
                         </div>
                     </div>
-                    <p class="text-xs ${alert.severity === 'warning' ? 'text-yellow-600' : 'text-blue-600'} mt-1">
+                    <p class="text-xs ${alert.severity === 'warning' ? 'text-yellow-300/70' : 'text-blue-300/70'} mt-2 font-medium">
                         Source: ${alert.source}
                     </p>
                 </div>
@@ -540,12 +737,12 @@
         function renderHealthConditions() {
             const container = document.getElementById('conditionsList');
             container.innerHTML = healthConditions.map(condition => `
-                <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                    <span class="text-sm text-gray-700">${condition.name}</span>
-                    <span class="text-xs px-2 py-1 rounded-full ${
-                        condition.severity === 'mild' ? 'bg-green-100 text-green-800' :
-                        condition.severity === 'moderate' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
+                <div class="flex items-center justify-between p-4 premium-card bg-white/5 border border-white/10">
+                    <span class="text-sm text-white font-medium">${condition.name}</span>
+                    <span class="text-xs px-3 py-1 rounded-full ${
+                        condition.severity === 'mild' ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                        condition.severity === 'moderate' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                        'bg-red-400/20 text-red-300 border border-red-400/30'
                     }">${condition.severity}</span>
                 </div>
             `).join('');
@@ -671,10 +868,10 @@
             const medicine = medicines.find(m => m.id === id);
             if (medicine) {
                 // Show confirmation animation
-                showNotification(Taking ${medicine.name}..., 'info');
+                showNotification(`Taking ${medicine.name}...`, 'info');
                 
                 // Animate the medicine card
-                const medicineCard = document.querySelector([onclick*="expandMedicineCard(${id})"]);
+                const medicineCard = document.querySelector(`[onclick*="expandMedicineCard(${id})"]`);
                 if (medicineCard) {
                     medicineCard.classList.add('bounce-in');
                 }
@@ -682,13 +879,13 @@
                 setTimeout(() => {
                     medicine.taken = true;
                     renderMedicines();
-                    showNotification(✅ ${medicine.name} taken successfully!, 'success');
+                    showNotification(`✅ ${medicine.name} taken successfully!`, 'success');
                     
                     // AI safety check after taking medicine
                     setTimeout(() => {
                         const newAlert = {
                             type: "taken",
-                            message: ${medicine.name} taken successfully. Monitor for side effects: ${medicine.sideEffects.join(', ')},
+                            message: `${medicine.name} taken successfully. Monitor for side effects: ${medicine.sideEffects.join(', ')}`,
                             severity: "info",
                             confidence: 95,
                             source: "Medicine Tracker"
@@ -703,7 +900,7 @@
         function showMedicineDetails(id) {
             const medicine = medicines.find(m => m.id === id);
             if (medicine) {
-                alert(Medicine Details:\n\nName: ${medicine.name}\nDosage: ${medicine.dosage}\nFrequency: ${medicine.frequency} daily\nTime: ${medicine.time}\n\nSide Effects:\n${medicine.sideEffects.join('\n')}\n\nInteractions:\n${medicine.interactions.join('\n')}\n\nStatus: ${medicine.taken ? 'Taken today' : 'Pending'});
+                alert(`Medicine Details:\n\nName: ${medicine.name}\nDosage: ${medicine.dosage}\nFrequency: ${medicine.frequency} daily\nTime: ${medicine.time}\n\nSide Effects:\n${medicine.sideEffects.join('\n')}\n\nInteractions:\n${medicine.interactions.join('\n')}\n\nStatus: ${medicine.taken ? 'Taken today' : 'Pending'}`);
             }
         }
 
@@ -744,7 +941,7 @@
                             <div class="flex-1">
                                 <h4 class="font-semibold text-gray-800">${suggestion.medicine}</h4>
                                 <p class="text-sm text-gray-600 mt-1">Dosage: ${suggestion.dosage}</p>
-                                <p class="text-xs text-orange-600 mt-2">⚠ ${suggestion.warning}</p>
+                                <p class="text-xs text-orange-600 mt-2">⚠️ ${suggestion.warning}</p>
                                 ${suggestion.aiReasoning ? `
                                     <p class="text-xs text-blue-600 mt-1 italic">AI: ${suggestion.aiReasoning}</p>
                                 ` : ''}
@@ -857,7 +1054,7 @@
             }
             
             renderMedicines();
-            alert(AI Safety Check Complete!\n\nSafety Score: ${analysisResult.score}%\n${analysisResult.summary});
+            alert(`AI Safety Check Complete!\n\nSafety Score: ${analysisResult.score}%\n${analysisResult.summary}`);
         }
 
         function performAISafetyAnalysis(medicine) {
@@ -871,10 +1068,10 @@
                     if (medicine.interactions.some(interaction => 
                         otherMed.name.toLowerCase().includes(interaction.toLowerCase()))) {
                         score -= 15;
-                        issues.push(Potential interaction with ${otherMed.name});
+                        issues.push(`Potential interaction with ${otherMed.name}`);
                         alerts.push({
                             type: "ai_interaction",
-                            message: AI detected interaction risk: ${medicine.name} + ${otherMed.name},
+                            message: `AI detected interaction risk: ${medicine.name} + ${otherMed.name}`,
                             severity: "warning",
                             confidence: 87,
                             source: "AI Drug Interaction Analysis"
@@ -891,11 +1088,11 @@
             
             if (incompatibleConditions.length > 0) {
                 score -= 10;
-                issues.push(May not be optimal for ${incompatibleConditions[0].name});
+                issues.push(`May not be optimal for ${incompatibleConditions[0].name}`);
             }
             
             const summary = issues.length > 0 ? 
-                Issues found: ${issues.join(', ')} : 
+                `Issues found: ${issues.join(', ')}` : 
                 'No safety concerns detected';
             
             return { score: Math.max(score, 0), alerts, summary };
@@ -943,7 +1140,7 @@
             renderDoctorConnections();
             document.getElementById('doctorShareCode').value = '';
             
-            alert(Successfully connected to ${newDoctor.name}!\nAccess level: ${accessLevel});
+            alert(`Successfully connected to ${newDoctor.name}!\nAccess level: ${accessLevel}`);
         }
 
         function syncWithDoctor(doctorId) {
@@ -951,7 +1148,7 @@
             if (doctor) {
                 doctor.lastSync = new Date().toISOString();
                 renderDoctorConnections();
-                alert(Synced with ${doctor.name}!\n\nShared data:\n• Current medications\n• Health conditions\n• Recent AI safety alerts\n• Medication adherence);
+                alert(`Synced with ${doctor.name}!\n\nShared data:\n• Current medications\n• Health conditions\n• Recent AI safety alerts\n• Medication adherence`);
             }
         }
 
@@ -1051,13 +1248,13 @@
         }
 
         function expandMedicineCard(id) {
-            const detailsElement = document.getElementById(medicineDetails${id});
+            const detailsElement = document.getElementById(`medicineDetails${id}`);
             const isExpanded = detailsElement.style.maxHeight !== '0px';
             
             // Close all other expanded cards
             medicines.forEach(med => {
                 if (med.id !== id) {
-                    const otherDetails = document.getElementById(medicineDetails${med.id});
+                    const otherDetails = document.getElementById(`medicineDetails${med.id}`);
                     if (otherDetails) {
                         otherDetails.style.maxHeight = '0px';
                     }
@@ -1106,7 +1303,7 @@
         function editMedicine(id) {
             const medicine = medicines.find(m => m.id === id);
             if (medicine) {
-                showNotification(Editing ${medicine.name}..., 'info');
+                showNotification(`Editing ${medicine.name}...`, 'info');
                 // Open edit modal with pre-filled data
                 document.getElementById('addMedicineModal').classList.remove('hidden');
                 document.getElementById('addMedicineModal').classList.add('flex');
@@ -1120,7 +1317,7 @@
         function setReminder(id) {
             const medicine = medicines.find(m => m.id === id);
             if (medicine) {
-                showNotification(Reminder set for ${medicine.name} at ${medicine.time}, 'success');
+                showNotification(`Reminder set for ${medicine.name} at ${medicine.time}`, 'success');
             }
         }
 
@@ -1176,5 +1373,5 @@
             }, 1000);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cf286447af8a1a',t:'MTc1NzUwOTc0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cf7202e0e84734',t:'MTc1NzUxMjc2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
