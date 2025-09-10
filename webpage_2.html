@@ -1,0 +1,1443 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capsule Buddy - Smart Medicine Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+            --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --shadow-premium: 0 32px 64px rgba(0, 0, 0, 0.25), 0 16px 32px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+            --shadow-elevated: 0 24px 48px rgba(0, 0, 0, 0.2), 0 12px 24px rgba(0, 0, 0, 0.12);
+            --border-premium: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            line-height: 1.6;
+        }
+        
+        .gradient-bg { 
+            background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(26, 26, 46, 0.95) 50%, rgba(22, 33, 62, 0.95) 100%);
+            backdrop-filter: blur(40px) saturate(180%);
+            box-shadow: var(--shadow-premium);
+            border-bottom: var(--border-premium);
+        }
+        
+        .card-shadow { 
+            box-shadow: var(--shadow-elevated);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: var(--border-premium);
+            background: var(--glass-bg);
+        }
+        
+        .glass-effect {
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: var(--border-premium);
+        }
+        .premium-card {
+            background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: var(--border-premium);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+        
+        .premium-button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .premium-button:hover {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3), 0 10px 20px rgba(78, 205, 196, 0.2);
+            color: white;
+        }
+        
+        .premium-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        
+        .premium-button:hover::before {
+            left: 100%;
+        }
+        
+        .pulse-animation { animation: pulse 3s ease-in-out infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+        
+        .slide-in { animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes slideIn {
+            from { transform: translateY(32px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        
+        .bounce-in { animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            50% { transform: scale(1.05) rotate(2deg); }
+            70% { transform: scale(0.95) rotate(-1deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        
+        .shake { animation: shake 0.6s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+            20%, 40%, 60%, 80% { transform: translateX(4px); }
+        }
+        
+        .glow { 
+            box-shadow: 0 0 40px rgba(102, 126, 234, 0.3), 0 0 80px rgba(118, 75, 162, 0.2), 0 0 120px rgba(240, 147, 251, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 600;
+        }
+        
+        .premium-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .animated-bg {
+            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #ec4899, #f59e0b);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .interactive-title .letter {
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            padding: 0 1px;
+        }
+        
+        .interactive-title .letter:hover {
+            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 12.5%, #ffd700 25%, #32cd32 37.5%, #00ced1 50%, #4169e1 62.5%, #8a2be2 75%, #ff1493 87.5%, #ff6347 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateY(-3px) scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.3)) drop-shadow(0 0 15px rgba(50, 205, 50, 0.2));
+        }
+        
+        .interactive-title .letter.space {
+            width: 0.5em;
+        }
+        
+        .interactive-title .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 12.5%, #ffd700 25%, #32cd32 37.5%, #00ced1 50%, #4169e1 62.5%, #8a2be2 75%, #ff1493 87.5%, #ff6347 100%);
+            opacity: 0;
+            border-radius: 6px;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+            filter: blur(8px);
+        }
+        
+        .interactive-title .letter:hover::before {
+            opacity: 0.15;
+        }
+        .progress-bar {
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .notification {
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        <div class="max-w-7xl mx-auto flex items-center justify-between relative z-10">
+            <div class="flex items-center space-x-6">
+                <div class="premium-card p-4 bg-gradient-to-br from-white/15 to-white/5 border border-white/20 shadow-2xl">
+                    <img src="https://raw.githubusercontent.com/Ishan-Mohta/CapsuleBuddy/refs/heads/main/capsulebuddylogo.jpg" style="height:65px; width:65px; border-radius: 45px;" alt="Capsule Buddy Logo"...>
+                        <!-- Medicine capsule -->
+                        <ellipse cx="12" cy="12" rx="6" ry="10" fill="url(#capsuleGradient)" stroke="none"/>
+                        <!-- Capsule division line -->
+                        <line x1="6" y1="12" x2="18" y2="12" stroke="white" stroke-width="1.5"/>
+                        <!-- Medical cross -->
+                        <g transform="translate(12,12)">
+                            <rect x="-1" y="-4" width="2" height="8" fill="white" rx="1"/>
+                            <rect x="-4" y="-1" width="8" height="2" fill="white" rx="1"/>
+                        </g>
+                        <!-- AI circuit pattern -->
+                        <circle cx="8" cy="8" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="16" cy="8" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="8" cy="16" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="16" cy="16" r="1" fill="#00ff88" opacity="0.8"/>
+                        <path d="M8 8 L16 8 M8 16 L16 16 M8 8 L8 16 M16 8 L16 16" stroke="#00ff88" stroke-width="0.5" opacity="0.6"/>
+                        
+                        <defs>
+                            <linearGradient id="capsuleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                                <stop offset="25%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#45b7d1;stop-opacity:1" />
+                                <stop offset="75%" style="stop-color:#96ceb4;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#feca57;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-4xl premium-title text-white mb-1 tracking-tight">
+                        <span class="interactive-title">
+                            <span class="letter" data-letter="C">C</span><span class="letter" data-letter="a">a</span><span class="letter" data-letter="p">p</span><span class="letter" data-letter="s">s</span><span class="letter" data-letter="u">u</span><span class="letter" data-letter="l">l</span><span class="letter" data-letter="e">e</span><span class="letter space" data-letter=" "> </span><span class="letter" data-letter="B">B</span><span class="letter" data-letter="u">u</span><span class="letter" data-letter="d">d</span><span class="letter" data-letter="d">d</span><span class="letter" data-letter="y">y</span>
+                        </span>
+                    </h1>
+                    <p class="text-base font-medium tracking-wide bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent animate-pulse">AI-Powered Medicine Intelligence</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-5">
+                <button id="emergencyBtn" class="premium-button px-8 py-4 rounded-2xl font-semibold text-white transition-all duration-400 transform hover:scale-105 shadow-xl hover:shadow-2xl relative overflow-hidden">
+                    <span class="relative z-10 flex items-center space-x-2">
+                        <span class="text-lg">🚨</span>
+                        <span>Emergency</span>
+                    </span>
+                </button>
+                <div class="premium-card w-14 h-14 bg-gradient-to-br from-white/15 to-white/5 border border-white/20 flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-400 cursor-pointer hover:scale-105">
+                    <span class="text-2xl">👤</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-8">
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <button id="scanBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-cyan-400 hover:to-blue-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">📱</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Scan Medicine</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">AI-powered recognition</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-blue-400 to-purple-400 progress-bar transition-all duration-500" id="scanProgress"></div>
+                    </div>
+                </div>
+            </button>
+            <button id="addMedBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-emerald-400 hover:to-green-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">💊</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Add Medicine</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Manual entry</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-green-400 to-emerald-400 progress-bar transition-all duration-500" id="addProgress"></div>
+                    </div>
+                </div>
+            </button>
+            <button id="doctorBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-purple-400 hover:to-pink-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">👨‍⚕️</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Doctor Connect</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Share profile</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-purple-400 to-pink-400 progress-bar transition-all duration-500" id="doctorProgress"></div>
+                    </div>
+                </div>
+            </button>
+            <button id="profileBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-orange-400 hover:to-red-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+                <div class="relative z-10">
+                    <div class="text-5xl mb-4 group-hover:bounce-in">📋</div>
+                    <h3 class="font-bold text-white text-xl mb-2 premium-title">Health Profile</h3>
+                    <p class="text-sm text-white/70 mb-4 font-medium">Conditions & allergies</p>
+                    <div class="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-orange-400 to-red-400 progress-bar transition-all duration-500" id="profileProgress"></div>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Today's Medicines -->
+            <div class="lg:col-span-2">
+                <div class="premium-card card-shadow p-10 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full -translate-y-20 translate-x-20"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between mb-10">
+                            <div>
+                                <h2 class="text-3xl font-bold gradient-text mb-2 premium-title">Today's Schedule</h2>
+                                <p class="text-base text-white/70 font-medium">Your personalized medicine routine</p>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="premium-button px-6 py-3 rounded-2xl text-sm font-semibold text-white shadow-lg">3 pending</span>
+                                <div class="w-4 h-4 bg-green-400 rounded-full animate-pulse shadow-lg"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="medicineList" class="space-y-5">
+                            <!-- Medicine items will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Safety Panel -->
+            <div class="space-y-8">
+                <!-- Safety Alerts -->
+                <div class="premium-card card-shadow p-8 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 rounded-full -translate-y-16 -translate-x-16"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold text-white mb-8 flex items-center premium-title">
+                            <div class="premium-card p-3 bg-gradient-to-r from-yellow-400/20 to-orange-500/20 border border-yellow-400/30 mr-4 shadow-lg">
+                                <span class="text-white text-xl">🤖</span>
+                            </div>
+                            <div>
+                                <div class="gradient-text">AI Safety Monitor</div>
+                                <p class="text-sm text-white/60 font-normal">Real-time analysis</p>
+                            </div>
+                        </h3>
+                        <div id="safetyAlerts" class="space-y-5">
+                            <!-- Safety alerts will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Conditions -->
+                <div class="premium-card card-shadow p-8 relative overflow-hidden">
+                    <div class="absolute bottom-0 right-0 w-28 h-28 bg-gradient-to-br from-green-500/10 to-blue-500/10 rounded-full translate-y-14 translate-x-14"></div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl font-bold gradient-text mb-8 premium-title">Health Profile</h3>
+                        <div id="conditionsList" class="space-y-4 mb-8">
+                            <!-- Conditions will be populated here -->
+                        </div>
+                        <button id="addConditionBtn" class="w-full premium-button py-4 rounded-2xl transition-all duration-400 font-semibold text-white hover:scale-105">
+                            <span class="mr-2">+</span> Add Condition
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Notifications -->
+    <div id="notificationContainer" class="fixed top-20 right-4 z-50 space-y-2">
+        <!-- Notifications will appear here -->
+    </div>
+
+    <!-- Floating Action Button -->
+    <div class="fixed bottom-10 right-10 z-40">
+        <button id="floatingBtn" class="premium-button p-6 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-400 floating group text-white hover:scale-110">
+            <svg class="w-8 h-8 group-hover:rotate-45 transition-transform duration-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+        </button>
+        <div id="fabMenu" class="absolute bottom-24 right-0 space-y-4 opacity-0 transform scale-0 transition-all duration-400">
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickAddMedicine()">
+                <span class="text-xl">💊</span>
+            </button>
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickScan()">
+                <span class="text-xl">📱</span>
+            </button>
+            <button class="premium-button p-5 rounded-3xl shadow-xl hover:shadow-2xl block transition-all duration-400 hover:scale-110 text-white" onclick="quickEmergency()">
+                <span class="text-xl">🚨</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Doctor Connection Modal -->
+    <div id="doctorModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 slide-in">
+            <h3 class="text-xl font-bold mb-4">Doctor Connections & Sharing</h3>
+            
+            <!-- Connected Doctors -->
+            <div class="mb-6">
+                <h4 class="font-semibold text-gray-800 mb-3">Connected Doctors</h4>
+                <div id="doctorList" class="space-y-3">
+                    <!-- Doctor connections will be populated here -->
+                </div>
+            </div>
+
+            <!-- Add New Doctor -->
+            <div class="border-t pt-4">
+                <h4 class="font-semibold text-gray-800 mb-3">Connect New Doctor</h4>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Doctor's Share Code</label>
+                        <input type="text" id="doctorShareCode" class="w-full border border-gray-300 text-black rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., CB-2024-ABC123">
+                    </div>
+                </div>
+                <button id="connectDoctor" class="mt-3 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                    Connect Doctor
+                </button>
+            </div>
+
+            <!-- Your Share Code -->
+            <div class="border-t pt-4 mt-4">
+                <h4 class="font-semibold text-gray-800 mb-2">Your Patient Share Code</h4>
+                <div class="bg-gray-50 rounded-lg p-3 flex items-center justify-between">
+                    <code class="text-lg font-mono text-black">CB-2024-PT567</code>
+                    <button onclick="copyShareCode()" class="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-sm transition-colors">
+                        Copy
+                    </button>
+                </div>
+                <p class="text-xs text-gray-600 mt-1">Share this code with your doctor to grant them access to your medicine profile</p>
+            </div>
+
+            <div class="flex space-x-3 pt-4">
+                <button id="cancelDoctor" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg transition-colors">Close</button>
+                <button id="syncAll" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition-colors">Sync All</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Medicine Modal -->
+    <div id="addMedicineModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-md mx-4 slide-in">
+            <h3 class="text-xl font-bold mb-4">Add New Medicine</h3>
+            <form id="addMedicineForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Medicine Name</label>
+                    <input type="text" id="medicineName" class="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., Aspirin">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Dosage</label>
+                    <input type="text" id="dosage" class="w-full border border-gray-300 text-black rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="e.g., 100mg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Frequency</label>
+                    <select id="frequency" class="w-full border border-gray-300 text-black rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="once">Once daily</option>
+                        <option value="twice">Twice daily</option>
+                        <option value="thrice">Three times daily</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Time</label>
+                    <input type="time" id="medicineTime" class="w-full border border-gray-300 text-black rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" id="cancelAddMedicine" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg transition-colors">Cancel</button>
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition-colors">Add Medicine</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Emergency Modal -->
+    <div id="emergencyModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4 slide-in">
+            <h3 class="text-xl font-bold text-red-600 mb-4 flex items-center">
+                <span class="mr-2">🚨</span>
+                Emergency Medicine Suggestions
+            </h3>
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <p class="text-sm text-red-800"><strong>Disclaimer:</strong> These are AI suggestions only. Contact emergency services or your doctor immediately for serious conditions.</p>
+            </div>
+            <div id="emergencySymptoms" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Describe your symptoms:</label>
+                <textarea id="symptomsInput" class="w-full border border-gray-300 rounded-lg px-3 py-2 h-20 focus:ring-2 focus:ring-red-500 focus:border-transparent" placeholder="e.g., headache, fever, nausea..."></textarea>
+            </div>
+            <div id="emergencySuggestions" class="space-y-3 mb-4">
+                <!-- Emergency suggestions will appear here -->
+            </div>
+            <div class="flex space-x-3">
+                <button id="cancelEmergency" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg transition-colors">Close</button>
+                <button id="getSuggestions" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors">Get Suggestions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scanner Modal -->
+    <div id="scannerModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 w-full max-w-lg mx-4 slide-in">
+            <h3 class="text-xl font-bold mb-4">AI Medicine Scanner</h3>
+            
+            <!-- Scanner Options -->
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <button id="cameraBtn" class="bg-blue-100 hover:bg-blue-200 p-4 rounded-lg text-center transition-colors">
+                    <div class="text-2xl mb-2">📷</div>
+                    <p class="text-sm font-medium">Camera Scan</p>
+                    <p class="text-xs text-gray-600">Photo recognition</p>
+                </button>
+                <button id="textSearchBtn" class="bg-green-100 hover:bg-green-200 p-4 rounded-lg text-center transition-colors">
+                    <div class="text-2xl mb-2">🔍</div>
+                    <p class="text-sm font-medium">Text Search</p>
+                    <p class="text-xs text-gray-600">Type medicine name</p>
+                </button>
+            </div>
+
+            <!-- Camera Scanner -->
+            <div id="cameraScanner" class="hidden">
+                <div class="bg-gray-100 rounded-lg p-8 text-center mb-4">
+                    <div class="text-6xl mb-4">📱</div>
+                    <p class="text-gray-600 mb-2">Point camera at medicine package</p>
+                    <p class="text-xs text-gray-500">AI will recognize text, barcodes, and pill shapes</p>
+                    <div class="mt-4 bg-blue-100 border-2 border-dashed border-blue-300 rounded-lg p-4">
+                        <div id="scanStatus" class="pulse-animation text-blue-600">🤖 AI Processing...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text Search -->
+            <div id="textSearch" class="hidden">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Search Medicine</label>
+                        <input type="text" id="medicineSearch" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Type medicine name...">
+                    </div>
+                    <div id="searchResults" class="space-y-2 max-h-40 overflow-y-auto">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex space-x-3 mt-4">
+                <button id="cancelScan" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 rounded-lg transition-colors">Cancel</button>
+                <button id="manualEntry" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg transition-colors">Manual Entry</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // AI Services Configuration
+        const AI_SERVICES = {
+            medicationSafety: {
+                endpoint: '/api/ai/medication-safety',
+                enabled: true
+            },
+            drugInteractions: {
+                endpoint: '/api/ai/drug-interactions',
+                enabled: true
+            },
+            symptomAnalysis: {
+                endpoint: '/api/ai/symptom-analysis',
+                enabled: true
+            },
+            imageRecognition: {
+                endpoint: '/api/ai/medicine-recognition',
+                enabled: true
+            }
+        };
+
+        // Sample data with enhanced AI analysis
+        let medicines = [
+            {
+                id: 1,
+                name: "Metformin",
+                dosage: "500mg",
+                time: "08:00",
+                frequency: "twice",
+                taken: false,
+                sideEffects: ["Nausea", "Diarrhea"],
+                interactions: ["Alcohol"],
+                aiSafetyScore: 85,
+                conditionCompatibility: ["diabetes"],
+                lastAiCheck: new Date().toISOString()
+            },
+            {
+                id: 2,
+                name: "Lisinopril",
+                dosage: "10mg",
+                time: "12:00",
+                frequency: "once",
+                taken: true,
+                sideEffects: ["Dry cough", "Dizziness"],
+                interactions: ["Potassium supplements"],
+                aiSafetyScore: 92,
+                conditionCompatibility: ["hypertension"],
+                lastAiCheck: new Date().toISOString()
+            },
+            {
+                id: 3,
+                name: "Aspirin",
+                dosage: "81mg",
+                time: "20:00",
+                frequency: "once",
+                taken: false,
+                sideEffects: ["Stomach irritation"],
+                interactions: ["Warfarin", "Alcohol"],
+                aiSafetyScore: 78,
+                conditionCompatibility: ["cardiovascular"],
+                lastAiCheck: new Date().toISOString()
+            }
+        ];
+
+        let healthConditions = [
+            { name: "Type 2 Diabetes", severity: "moderate" },
+            { name: "High Blood Pressure", severity: "mild" },
+            { name: "High Cholesterol", severity: "mild" }
+        ];
+
+        // Doctor-Patient Sharing System
+        let doctorConnections = [
+            {
+                id: 1,
+                name: "Dr. Sarah Johnson",
+                specialty: "Endocrinology",
+                hospital: "City Medical Center",
+                accessLevel: "full",
+                lastSync: new Date().toISOString(),
+                shareCode: "CB-2024-SJ789"
+            },
+            {
+                id: 2,
+                name: "Dr. Michael Chen",
+                specialty: "Cardiology", 
+                hospital: "Heart Institute",
+                accessLevel: "limited",
+                lastSync: new Date(Date.now() - 86400000).toISOString(),
+                shareCode: "CB-2024-MC456"
+            }
+        ];
+
+        let safetyAlerts = [
+            {
+                type: "ai_interaction",
+                message: "AI detected potential interaction: Aspirin + Alcohol may increase bleeding risk",
+                severity: "warning",
+                confidence: 94,
+                source: "AI Safety Analysis"
+            },
+            {
+                type: "ai_monitoring",
+                message: "AI recommends blood glucose monitoring with current Metformin dosage",
+                severity: "info",
+                confidence: 87,
+                source: "AI Health Monitor"
+            },
+            {
+                type: "doctor_alert",
+                message: "Dr. Johnson updated your Metformin dosage - check new schedule",
+                severity: "info",
+                confidence: 100,
+                source: "Doctor Update"
+            }
+        ];
+
+        // Initialize the app
+        function init() {
+            renderMedicines();
+            renderSafetyAlerts();
+            renderHealthConditions();
+            setupEventListeners();
+        }
+
+        function renderMedicines() {
+            const container = document.getElementById('medicineList');
+            container.innerHTML = medicines.map(med => `
+                <div class="premium-card border border-white/10 p-6 ${med.taken ? 'bg-green-500/10 border-green-400/30' : 'bg-white/5'} hover:shadow-2xl transition-all duration-400 hover:scale-102 group cursor-pointer hover:bg-gradient-to-br hover:from-purple-500/20 hover:via-pink-500/20 hover:to-orange-500/20 hover:border-purple-400/40 relative overflow-hidden" onclick="expandMedicineCard(${med.id})">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative z-10">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-3xl group-hover:bounce-in">${med.taken ? '✅' : '💊'}</div>
+                                <div>
+                                    <h4 class="font-semibold text-white text-lg flex items-center premium-title">
+                                        ${med.name}
+                                        <span class="ml-3 px-3 py-1 text-xs rounded-full transition-all duration-400 ${
+                                            med.aiSafetyScore >= 90 ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                                            med.aiSafetyScore >= 80 ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                                            'bg-red-400/20 text-red-300 border border-red-400/30'
+                                        }">
+                                            AI: ${med.aiSafetyScore}%
+                                        </span>
+                                    </h4>
+                                    <p class="text-sm text-white/70 font-medium">${med.dosage} at ${med.time}</p>
+                                    <div class="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-blue-400 to-purple-400 transition-all duration-500" style="width: ${med.aiSafetyScore}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button onclick="event.stopPropagation(); runAISafetyCheck(${med.id})" class="premium-button px-4 py-2 rounded-xl text-xs transition-all duration-400 hover:scale-105 text-white hover:bg-gradient-to-r hover:from-purple-500 hover:via-pink-500 hover:to-red-500 hover:shadow-lg hover:shadow-purple-500/50">
+                                🤖 AI Check
+                            </button>
+                            ${!med.taken ? `
+                                <button onclick="event.stopPropagation(); takeMedicine(${med.id})" class="premium-button px-6 py-3 rounded-xl text-sm transition-all duration-400 hover:scale-105 pulse-animation text-white font-semibold hover:bg-gradient-to-r hover:from-green-400 hover:via-emerald-500 hover:to-teal-500 hover:shadow-xl hover:shadow-green-500/50">
+                                    Take Now
+                                </button>
+                            ` : `
+                                <span class="text-green-400 text-sm font-semibold bounce-in">✓ Taken</span>
+                            `}
+                            <button onclick="event.stopPropagation(); showMedicineDetails(${med.id})" class="text-blue-400 hover:text-blue-300 text-sm transition-colors font-medium">
+                                Details
+                            </button>
+                        </div>
+                    </div>
+                    <div id="medicineDetails${med.id}" class="mt-4 overflow-hidden transition-all duration-400" style="max-height: 0;">
+                        ${med.sideEffects.length > 0 ? `
+                            <div class="text-xs text-white/60 mb-3 font-medium">
+                                <strong class="text-white/80">Side effects:</strong> ${med.sideEffects.join(', ')}
+                            </div>
+                        ` : ''}
+                        <div class="text-xs text-white/50 mb-3">
+                            Last AI check: ${new Date(med.lastAiCheck).toLocaleString()}
+                        </div>
+                        <div class="flex space-x-3">
+                            <button onclick="event.stopPropagation(); editMedicine(${med.id})" class="premium-button px-3 py-2 rounded-xl text-xs transition-all duration-400 text-white">
+                                Edit
+                            </button>
+                            <button onclick="event.stopPropagation(); setReminder(${med.id})" class="premium-button px-3 py-2 rounded-xl text-xs transition-all duration-400 text-white">
+                                Remind
+                            </button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSafetyAlerts() {
+            const container = document.getElementById('safetyAlerts');
+            container.innerHTML = safetyAlerts.map(alert => `
+                <div class="premium-card border-l-4 ${alert.severity === 'warning' ? 'border-yellow-400/60 bg-yellow-500/10' : 'border-blue-400/60 bg-blue-500/10'} p-4 border border-white/10">
+                    <div class="flex items-start justify-between">
+                        <p class="text-sm ${alert.severity === 'warning' ? 'text-yellow-200' : 'text-blue-200'} flex-1 font-medium">${alert.message}</p>
+                        <div class="ml-3 text-xs">
+                            <span class="px-3 py-1 rounded-full ${
+                                alert.confidence >= 90 ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                                alert.confidence >= 70 ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                                'bg-red-400/20 text-red-300 border border-red-400/30'
+                            }">
+                                ${alert.confidence}%
+                            </span>
+                        </div>
+                    </div>
+                    <p class="text-xs ${alert.severity === 'warning' ? 'text-yellow-300/70' : 'text-blue-300/70'} mt-2 font-medium">
+                        Source: ${alert.source}
+                    </p>
+                </div>
+            `).join('');
+        }
+
+        function renderHealthConditions() {
+            const container = document.getElementById('conditionsList');
+            container.innerHTML = healthConditions.map(condition => `
+                <div class="flex items-center justify-between p-4 premium-card bg-white/5 border border-white/10">
+                    <span class="text-sm text-white font-medium">${condition.name}</span>
+                    <span class="text-xs px-3 py-1 rounded-full ${
+                        condition.severity === 'mild' ? 'bg-green-400/20 text-green-300 border border-green-400/30' :
+                        condition.severity === 'moderate' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' :
+                        'bg-red-400/20 text-red-300 border border-red-400/30'
+                    }">${condition.severity}</span>
+                </div>
+            `).join('');
+        }
+
+        function setupEventListeners() {
+            // Modal controls
+            document.getElementById('addMedBtn').addEventListener('click', () => {
+                document.getElementById('addMedicineModal').classList.remove('hidden');
+                document.getElementById('addMedicineModal').classList.add('flex');
+            });
+
+            document.getElementById('cancelAddMedicine').addEventListener('click', () => {
+                document.getElementById('addMedicineModal').classList.add('hidden');
+                document.getElementById('addMedicineModal').classList.remove('flex');
+            });
+
+            document.getElementById('emergencyBtn').addEventListener('click', () => {
+                document.getElementById('emergencyModal').classList.remove('hidden');
+                document.getElementById('emergencyModal').classList.add('flex');
+            });
+
+            document.getElementById('cancelEmergency').addEventListener('click', () => {
+                document.getElementById('emergencyModal').classList.add('hidden');
+                document.getElementById('emergencyModal').classList.remove('flex');
+            });
+
+            document.getElementById('scanBtn').addEventListener('click', () => {
+                document.getElementById('scannerModal').classList.remove('hidden');
+                document.getElementById('scannerModal').classList.add('flex');
+                // Simulate scan completion after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('scannerModal').classList.add('hidden');
+                    document.getElementById('scannerModal').classList.remove('flex');
+                    alert('Medicine scanned: Ibuprofen 200mg\nAdded to your profile!');
+                }, 3000);
+            });
+
+            document.getElementById('cancelScan').addEventListener('click', () => {
+                document.getElementById('scannerModal').classList.add('hidden');
+                document.getElementById('scannerModal').classList.remove('flex');
+            });
+
+            // Form submission
+            document.getElementById('addMedicineForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newMedicine = {
+                    id: medicines.length + 1,
+                    name: document.getElementById('medicineName').value,
+                    dosage: document.getElementById('dosage').value,
+                    time: document.getElementById('medicineTime').value,
+                    frequency: document.getElementById('frequency').value,
+                    taken: false,
+                    sideEffects: [],
+                    interactions: []
+                };
+                medicines.push(newMedicine);
+                renderMedicines();
+                document.getElementById('addMedicineModal').classList.add('hidden');
+                document.getElementById('addMedicineModal').classList.remove('flex');
+                document.getElementById('addMedicineForm').reset();
+            });
+
+            // Emergency suggestions
+            document.getElementById('getSuggestions').addEventListener('click', () => {
+                const symptoms = document.getElementById('symptomsInput').value;
+                if (symptoms.trim()) {
+                    showEmergencySuggestions(symptoms);
+                }
+            });
+
+            // Doctor connect
+            document.getElementById('doctorBtn').addEventListener('click', () => {
+                document.getElementById('doctorModal').classList.remove('hidden');
+                document.getElementById('doctorModal').classList.add('flex');
+                renderDoctorConnections();
+            });
+
+            document.getElementById('cancelDoctor').addEventListener('click', () => {
+                document.getElementById('doctorModal').classList.add('hidden');
+                document.getElementById('doctorModal').classList.remove('flex');
+            });
+
+            // Scanner enhancements
+            document.getElementById('cameraBtn').addEventListener('click', () => {
+                document.getElementById('cameraScanner').classList.remove('hidden');
+                document.getElementById('textSearch').classList.add('hidden');
+                simulateAIImageRecognition();
+            });
+
+            document.getElementById('textSearchBtn').addEventListener('click', () => {
+                document.getElementById('textSearch').classList.remove('hidden');
+                document.getElementById('cameraScanner').classList.add('hidden');
+            });
+
+            document.getElementById('medicineSearch').addEventListener('input', (e) => {
+                performMedicineSearch(e.target.value);
+            });
+
+            document.getElementById('manualEntry').addEventListener('click', () => {
+                document.getElementById('scannerModal').classList.add('hidden');
+                document.getElementById('scannerModal').classList.remove('flex');
+                document.getElementById('addMedicineModal').classList.remove('hidden');
+                document.getElementById('addMedicineModal').classList.add('flex');
+            });
+
+            // Connect doctor
+            document.getElementById('connectDoctor').addEventListener('click', () => {
+                const shareCode = document.getElementById('doctorShareCode').value;
+                const accessLevel = document.getElementById('accessLevel').value;
+                if (shareCode) {
+                    connectNewDoctor(shareCode, accessLevel);
+                }
+            });
+
+            // Health profile
+            document.getElementById('profileBtn').addEventListener('click', () => {
+                alert('Health Profile:\n\n• Current conditions: ' + healthConditions.map(c => c.name).join(', ') + '\n• Allergies: None recorded\n• Emergency contacts: 2 added\n• Insurance info: On file\n\nClick "Add Condition" to update your profile.');
+            });
+        }
+
+        function takeMedicine(id) {
+            const medicine = medicines.find(m => m.id === id);
+            if (medicine) {
+                // Show confirmation animation
+                showNotification(`Taking ${medicine.name}...`, 'info');
+                
+                // Animate the medicine card
+                const medicineCard = document.querySelector(`[onclick*="expandMedicineCard(${id})"]`);
+                if (medicineCard) {
+                    medicineCard.classList.add('bounce-in');
+                }
+                
+                setTimeout(() => {
+                    medicine.taken = true;
+                    renderMedicines();
+                    showNotification(`✅ ${medicine.name} taken successfully!`, 'success');
+                    
+                    // AI safety check after taking medicine
+                    setTimeout(() => {
+                        const newAlert = {
+                            type: "taken",
+                            message: `${medicine.name} taken successfully. Monitor for side effects: ${medicine.sideEffects.join(', ')}`,
+                            severity: "info",
+                            confidence: 95,
+                            source: "Medicine Tracker"
+                        };
+                        safetyAlerts.unshift(newAlert);
+                        renderSafetyAlerts();
+                    }, 1000);
+                }, 800);
+            }
+        }
+
+        function showMedicineDetails(id) {
+            const medicine = medicines.find(m => m.id === id);
+            if (medicine) {
+                alert(`Medicine Details:\n\nName: ${medicine.name}\nDosage: ${medicine.dosage}\nFrequency: ${medicine.frequency} daily\nTime: ${medicine.time}\n\nSide Effects:\n${medicine.sideEffects.join('\n')}\n\nInteractions:\n${medicine.interactions.join('\n')}\n\nStatus: ${medicine.taken ? 'Taken today' : 'Pending'}`);
+            }
+        }
+
+        function showEmergencySuggestions(symptoms) {
+            const container = document.getElementById('emergencySuggestions');
+            
+            // Enhanced AI symptom analysis
+            const aiAnalysis = analyzeSymptoms(symptoms);
+            let suggestions = [];
+            
+            // AI-driven suggestions based on symptoms and health profile
+            aiAnalysis.conditions.forEach(condition => {
+                const safeMeds = getSafeMedicationsForCondition(condition, healthConditions);
+                suggestions.push(...safeMeds);
+            });
+            
+            if (suggestions.length === 0) {
+                suggestions.push({
+                    medicine: 'No safe recommendations found',
+                    dosage: 'Contact healthcare provider immediately',
+                    warning: 'AI analysis suggests professional medical evaluation needed',
+                    confidence: 95,
+                    aiReasoning: 'Symptoms may indicate serious condition requiring immediate medical attention'
+                });
+            }
+            
+            container.innerHTML = `
+                <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h5 class="font-semibold text-blue-800 text-sm">🤖 AI Analysis Results</h5>
+                    <p class="text-xs text-blue-700 mt-1">
+                        Detected conditions: ${aiAnalysis.conditions.join(', ') || 'None specific'}<br>
+                        Confidence: ${aiAnalysis.confidence}% | Risk Level: ${aiAnalysis.riskLevel}
+                    </p>
+                </div>
+                ${suggestions.map(suggestion => `
+                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 mb-3">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">${suggestion.medicine}</h4>
+                                <p class="text-sm text-gray-600 mt-1">Dosage: ${suggestion.dosage}</p>
+                                <p class="text-xs text-orange-600 mt-2">⚠️ ${suggestion.warning}</p>
+                                ${suggestion.aiReasoning ? `
+                                    <p class="text-xs text-blue-600 mt-1 italic">AI: ${suggestion.aiReasoning}</p>
+                                ` : ''}
+                            </div>
+                            <span class="ml-2 px-2 py-1 text-xs rounded-full ${
+                                suggestion.confidence >= 80 ? 'bg-green-100 text-green-700' :
+                                suggestion.confidence >= 60 ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-red-100 text-red-700'
+                            }">
+                                ${suggestion.confidence || 'N/A'}%
+                            </span>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        // AI Analysis Functions
+        function analyzeSymptoms(symptoms) {
+            const lowerSymptoms = symptoms.toLowerCase();
+            let conditions = [];
+            let confidence = 70;
+            let riskLevel = 'low';
+            
+            // Symptom pattern matching
+            if (lowerSymptoms.includes('chest pain') || lowerSymptoms.includes('heart')) {
+                conditions.push('cardiovascular emergency');
+                confidence = 95;
+                riskLevel = 'high';
+            } else if (lowerSymptoms.includes('headache') && lowerSymptoms.includes('severe')) {
+                conditions.push('severe headache');
+                confidence = 85;
+                riskLevel = 'medium';
+            } else if (lowerSymptoms.includes('fever') && lowerSymptoms.includes('high')) {
+                conditions.push('high fever');
+                confidence = 90;
+                riskLevel = 'medium';
+            } else if (lowerSymptoms.includes('pain')) {
+                conditions.push('pain management');
+                confidence = 75;
+            } else if (lowerSymptoms.includes('nausea') || lowerSymptoms.includes('vomit')) {
+                conditions.push('gastrointestinal distress');
+                confidence = 80;
+            }
+            
+            return { conditions, confidence, riskLevel };
+        }
+
+        function getSafeMedicationsForCondition(condition, userConditions) {
+            const medications = [];
+            
+            switch (condition) {
+                case 'pain management':
+                    if (!userConditions.some(c => c.name.includes('liver'))) {
+                        medications.push({
+                            medicine: 'Acetaminophen (Tylenol)',
+                            dosage: '500-1000mg every 4-6 hours (max 3000mg/day)',
+                            warning: 'Safe with your current health conditions',
+                            confidence: 88,
+                            aiReasoning: 'Safest pain reliever for your health profile'
+                        });
+                    }
+                    break;
+                case 'high fever':
+                    medications.push({
+                        medicine: 'Ibuprofen + Cooling measures',
+                        dosage: '400mg every 6 hours + cold compress',
+                        warning: 'Monitor blood pressure if you have hypertension',
+                        confidence: 82,
+                        aiReasoning: 'Effective fever reducer, but requires BP monitoring'
+                    });
+                    break;
+                case 'gastrointestinal distress':
+                    medications.push({
+                        medicine: 'Oral rehydration solution',
+                        dosage: 'Small sips every 15 minutes',
+                        warning: 'Avoid solid foods until symptoms improve',
+                        confidence: 90,
+                        aiReasoning: 'Prevents dehydration, safe for all conditions'
+                    });
+                    break;
+                case 'cardiovascular emergency':
+                    medications.push({
+                        medicine: 'Call 911 immediately',
+                        dosage: 'Emergency services required',
+                        warning: 'Do not take any medications - seek immediate medical care',
+                        confidence: 99,
+                        aiReasoning: 'Chest pain requires immediate professional evaluation'
+                    });
+                    break;
+            }
+            
+            return medications;
+        }
+
+        // Additional AI and Sharing Functions
+        function runAISafetyCheck(medicineId) {
+            const medicine = medicines.find(m => m.id === medicineId);
+            if (!medicine) return;
+            
+            // Simulate AI safety analysis
+            const analysisResult = performAISafetyAnalysis(medicine);
+            medicine.aiSafetyScore = analysisResult.score;
+            medicine.lastAiCheck = new Date().toISOString();
+            
+            // Add new safety alert if issues found
+            if (analysisResult.alerts.length > 0) {
+                safetyAlerts.unshift(...analysisResult.alerts);
+                renderSafetyAlerts();
+            }
+            
+            renderMedicines();
+            alert(`AI Safety Check Complete!\n\nSafety Score: ${analysisResult.score}%\n${analysisResult.summary}`);
+        }
+
+        function performAISafetyAnalysis(medicine) {
+            let score = 100;
+            let alerts = [];
+            let issues = [];
+            
+            // Check interactions with other medicines
+            medicines.forEach(otherMed => {
+                if (otherMed.id !== medicine.id) {
+                    if (medicine.interactions.some(interaction => 
+                        otherMed.name.toLowerCase().includes(interaction.toLowerCase()))) {
+                        score -= 15;
+                        issues.push(`Potential interaction with ${otherMed.name}`);
+                        alerts.push({
+                            type: "ai_interaction",
+                            message: `AI detected interaction risk: ${medicine.name} + ${otherMed.name}`,
+                            severity: "warning",
+                            confidence: 87,
+                            source: "AI Drug Interaction Analysis"
+                        });
+                    }
+                }
+            });
+            
+            // Check compatibility with health conditions
+            const incompatibleConditions = healthConditions.filter(condition => {
+                return !medicine.conditionCompatibility.some(compat => 
+                    condition.name.toLowerCase().includes(compat));
+            });
+            
+            if (incompatibleConditions.length > 0) {
+                score -= 10;
+                issues.push(`May not be optimal for ${incompatibleConditions[0].name}`);
+            }
+            
+            const summary = issues.length > 0 ? 
+                `Issues found: ${issues.join(', ')}` : 
+                'No safety concerns detected';
+            
+            return { score: Math.max(score, 0), alerts, summary };
+        }
+
+        function renderDoctorConnections() {
+            const container = document.getElementById('doctorList');
+            container.innerHTML = doctorConnections.map(doctor => `
+                <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h5 class="font-semibold text-gray-800">${doctor.name}</h5>
+                            <p class="text-sm text-gray-600">${doctor.specialty} • ${doctor.hospital}</p>
+                            <p class="text-xs text-gray-500">Access: ${doctor.accessLevel} • Last sync: ${new Date(doctor.lastSync).toLocaleDateString()}</p>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-1 text-xs rounded-full ${
+                                new Date() - new Date(doctor.lastSync) < 86400000 ? 
+                                'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                            }">
+                                ${new Date() - new Date(doctor.lastSync) < 86400000 ? 'Synced' : 'Pending'}
+                            </span>
+                            <button onclick="syncWithDoctor(${doctor.id})" class="text-blue-600 hover:text-blue-800 text-sm">
+                                Sync
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function connectNewDoctor(shareCode, accessLevel) {
+            // Simulate doctor connection
+            const newDoctor = {
+                id: doctorConnections.length + 1,
+                name: "Dr. " + shareCode.split('-')[2],
+                specialty: "General Medicine",
+                hospital: "Connected via share code",
+                accessLevel: accessLevel,
+                lastSync: new Date().toISOString(),
+                shareCode: shareCode
+            };
+            
+            doctorConnections.push(newDoctor);
+            renderDoctorConnections();
+            document.getElementById('doctorShareCode').value = '';
+            
+            alert(`Successfully connected to ${newDoctor.name}!\nAccess level: ${accessLevel}`);
+        }
+
+        function syncWithDoctor(doctorId) {
+            const doctor = doctorConnections.find(d => d.id === doctorId);
+            if (doctor) {
+                doctor.lastSync = new Date().toISOString();
+                renderDoctorConnections();
+                alert(`Synced with ${doctor.name}!\n\nShared data:\n• Current medications\n• Health conditions\n• Recent AI safety alerts\n• Medication adherence`);
+            }
+        }
+
+        function simulateAIImageRecognition() {
+            const statusElement = document.getElementById('scanStatus');
+            const steps = [
+                '🤖 AI Processing image...',
+                '📝 Extracting text from package...',
+                '🔍 Identifying medicine name...',
+                '💊 Looking up drug information...',
+                '✅ Medicine identified!'
+            ];
+            
+            let stepIndex = 0;
+            const interval = setInterval(() => {
+                statusElement.textContent = steps[stepIndex];
+                stepIndex++;
+                
+                if (stepIndex >= steps.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('scannerModal').classList.add('hidden');
+                        document.getElementById('scannerModal').classList.remove('flex');
+                        alert('AI Image Recognition Results:\n\nMedicine: Ibuprofen 200mg\nManufacturer: Generic\nExpiry: 12/2025\n\nWould you like to add this to your profile?');
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        function performMedicineSearch(query) {
+            const container = document.getElementById('searchResults');
+            if (!query.trim()) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            // Simulate medicine database search
+            const medicines = [
+                'Acetaminophen 500mg', 'Ibuprofen 200mg', 'Aspirin 81mg',
+                'Metformin 500mg', 'Lisinopril 10mg', 'Atorvastatin 20mg',
+                'Omeprazole 20mg', 'Levothyroxine 50mcg', 'Amlodipine 5mg'
+            ];
+            
+            const results = medicines.filter(med => 
+                med.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            container.innerHTML = results.map(result => `
+                <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer" onclick="selectMedicine('${result}')">
+                    <p class="text-sm font-medium">${result}</p>
+                </div>
+            `).join('');
+        }
+
+        function selectMedicine(medicineName) {
+            document.getElementById('scannerModal').classList.add('hidden');
+            document.getElementById('scannerModal').classList.remove('flex');
+            document.getElementById('addMedicineModal').classList.remove('hidden');
+            document.getElementById('addMedicineModal').classList.add('flex');
+            document.getElementById('medicineName').value = medicineName.split(' ')[0];
+            document.getElementById('dosage').value = medicineName.split(' ')[1] || '';
+        }
+
+        function copyShareCode() {
+            navigator.clipboard.writeText('CB-2024-PT567').then(() => {
+                alert('Share code copied to clipboard!');
+            });
+        }
+
+        // Interactive Functions
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification bg-white border-l-4 ${
+                type === 'success' ? 'border-green-500' : 
+                type === 'error' ? 'border-red-500' : 
+                type === 'warning' ? 'border-yellow-500' : 'border-blue-500'
+            } p-4 rounded-lg shadow-lg max-w-sm`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <p class="text-sm text-gray-800">${message}</p>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            container.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        function expandMedicineCard(id) {
+            const detailsElement = document.getElementById(`medicineDetails${id}`);
+            const isExpanded = detailsElement.style.maxHeight !== '0px';
+            
+            // Close all other expanded cards
+            medicines.forEach(med => {
+                if (med.id !== id) {
+                    const otherDetails = document.getElementById(`medicineDetails${med.id}`);
+                    if (otherDetails) {
+                        otherDetails.style.maxHeight = '0px';
+                    }
+                }
+            });
+            
+            // Toggle current card
+            if (isExpanded) {
+                detailsElement.style.maxHeight = '0px';
+            } else {
+                detailsElement.style.maxHeight = detailsElement.scrollHeight + 'px';
+            }
+        }
+
+        function animateProgressBar(elementId, targetWidth) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.width = targetWidth + '%';
+            }
+        }
+
+        function quickAddMedicine() {
+            animateProgressBar('addProgress', 100);
+            setTimeout(() => {
+                document.getElementById('addMedicineModal').classList.remove('hidden');
+                document.getElementById('addMedicineModal').classList.add('flex');
+                animateProgressBar('addProgress', 0);
+            }, 500);
+        }
+
+        function quickScan() {
+            animateProgressBar('scanProgress', 100);
+            setTimeout(() => {
+                document.getElementById('scannerModal').classList.remove('hidden');
+                document.getElementById('scannerModal').classList.add('flex');
+                animateProgressBar('scanProgress', 0);
+            }, 500);
+        }
+
+        function quickEmergency() {
+            document.getElementById('emergencyModal').classList.remove('hidden');
+            document.getElementById('emergencyModal').classList.add('flex');
+            showNotification('Emergency mode activated!', 'warning');
+        }
+
+        function editMedicine(id) {
+            const medicine = medicines.find(m => m.id === id);
+            if (medicine) {
+                showNotification(`Editing ${medicine.name}...`, 'info');
+                // Open edit modal with pre-filled data
+                document.getElementById('addMedicineModal').classList.remove('hidden');
+                document.getElementById('addMedicineModal').classList.add('flex');
+                document.getElementById('medicineName').value = medicine.name;
+                document.getElementById('dosage').value = medicine.dosage;
+                document.getElementById('medicineTime').value = medicine.time;
+                document.getElementById('frequency').value = medicine.frequency;
+            }
+        }
+
+        function setReminder(id) {
+            const medicine = medicines.find(m => m.id === id);
+            if (medicine) {
+                showNotification(`Reminder set for ${medicine.name} at ${medicine.time}`, 'success');
+            }
+        }
+
+        // Floating Action Button
+        let fabMenuOpen = false;
+        document.getElementById('floatingBtn').addEventListener('click', () => {
+            const menu = document.getElementById('fabMenu');
+            fabMenuOpen = !fabMenuOpen;
+            
+            if (fabMenuOpen) {
+                menu.classList.remove('opacity-0', 'scale-0');
+                menu.classList.add('opacity-100', 'scale-100');
+            } else {
+                menu.classList.add('opacity-0', 'scale-0');
+                menu.classList.remove('opacity-100', 'scale-100');
+            }
+        });
+
+        // Enhanced button interactions
+        function setupInteractiveButtons() {
+            // Add click animations to all buttons
+            document.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple-effect');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        }
+
+        // Initialize the app when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            setupInteractiveButtons();
+            
+            // Show welcome notification
+            setTimeout(() => {
+                showNotification('Welcome to Capsule Buddy! 💊', 'success');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
