@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<img src="YOUR_LOGO_URL_HERE" alt="Capsule Buddy Logo"...
+   <img src="https://i.imgur.com/your-logo.png" alt="Capsule Buddy Logo"...<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -78,10 +79,11 @@
         }
         
         .premium-button:hover {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-elevated);
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3), 0 10px 20px rgba(78, 205, 196, 0.2);
+            color: white;
         }
         
         .premium-button::before {
@@ -179,6 +181,47 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
+        
+        .interactive-title .letter {
+            display: inline-block;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            padding: 0 1px;
+        }
+        
+        .interactive-title .letter:hover {
+            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 12.5%, #ffd700 25%, #32cd32 37.5%, #00ced1 50%, #4169e1 62.5%, #8a2be2 75%, #ff1493 87.5%, #ff6347 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transform: translateY(-3px) scale(1.1);
+            text-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+            filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.3)) drop-shadow(0 0 15px rgba(50, 205, 50, 0.2));
+        }
+        
+        .interactive-title .letter.space {
+            width: 0.5em;
+        }
+        
+        .interactive-title .letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #ff0080 0%, #ff8c00 12.5%, #ffd700 25%, #32cd32 37.5%, #00ced1 50%, #4169e1 62.5%, #8a2be2 75%, #ff1493 87.5%, #ff6347 100%);
+            opacity: 0;
+            border-radius: 6px;
+            z-index: -1;
+            transition: opacity 0.4s ease;
+            filter: blur(8px);
+        }
+        
+        .interactive-title .letter:hover::before {
+            opacity: 0.15;
+        }
         .progress-bar {
             width: 0%;
             transition: width 0.3s ease;
@@ -199,13 +242,41 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between relative z-10">
             <div class="flex items-center space-x-6">
                 <div class="premium-card p-4 bg-gradient-to-br from-white/15 to-white/5 border border-white/20 shadow-2xl">
-                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Medicine capsule -->
+                        <ellipse cx="12" cy="12" rx="6" ry="10" fill="url(#capsuleGradient)" stroke="none"/>
+                        <!-- Capsule division line -->
+                        <line x1="6" y1="12" x2="18" y2="12" stroke="white" stroke-width="1.5"/>
+                        <!-- Medical cross -->
+                        <g transform="translate(12,12)">
+                            <rect x="-1" y="-4" width="2" height="8" fill="white" rx="1"/>
+                            <rect x="-4" y="-1" width="8" height="2" fill="white" rx="1"/>
+                        </g>
+                        <!-- AI circuit pattern -->
+                        <circle cx="8" cy="8" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="16" cy="8" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="8" cy="16" r="1" fill="#00ff88" opacity="0.8"/>
+                        <circle cx="16" cy="16" r="1" fill="#00ff88" opacity="0.8"/>
+                        <path d="M8 8 L16 8 M8 16 L16 16 M8 8 L8 16 M16 8 L16 16" stroke="#00ff88" stroke-width="0.5" opacity="0.6"/>
+                        
+                        <defs>
+                            <linearGradient id="capsuleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+                                <stop offset="25%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#45b7d1;stop-opacity:1" />
+                                <stop offset="75%" style="stop-color:#96ceb4;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#feca57;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-4xl premium-title text-white mb-1 tracking-tight">Capsule Buddy</h1>
-                    <p class="text-base text-white/80 font-medium tracking-wide">AI-Powered Medicine Intelligence</p>
+                    <h1 class="text-4xl premium-title text-white mb-1 tracking-tight">
+                        <span class="interactive-title">
+                            <span class="letter" data-letter="C">C</span><span class="letter" data-letter="a">a</span><span class="letter" data-letter="p">p</span><span class="letter" data-letter="s">s</span><span class="letter" data-letter="u">u</span><span class="letter" data-letter="l">l</span><span class="letter" data-letter="e">e</span><span class="letter space" data-letter=" "> </span><span class="letter" data-letter="B">B</span><span class="letter" data-letter="u">u</span><span class="letter" data-letter="d">d</span><span class="letter" data-letter="d">d</span><span class="letter" data-letter="y">y</span>
+                        </span>
+                    </h1>
+                    <p class="text-base font-medium tracking-wide bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent animate-pulse">AI-Powered Medicine Intelligence</p>
                 </div>
             </div>
             <div class="flex items-center space-x-5">
@@ -225,8 +296,8 @@
     <div class="max-w-7xl mx-auto p-8">
         <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <button id="scanBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+            <button id="scanBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-cyan-400 hover:to-blue-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-blue-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
                 <div class="relative z-10">
                     <div class="text-5xl mb-4 group-hover:bounce-in">📱</div>
                     <h3 class="font-bold text-white text-xl mb-2 premium-title">Scan Medicine</h3>
@@ -236,8 +307,8 @@
                     </div>
                 </div>
             </button>
-            <button id="addMedBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+            <button id="addMedBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-emerald-400 hover:to-green-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
                 <div class="relative z-10">
                     <div class="text-5xl mb-4 group-hover:bounce-in">💊</div>
                     <h3 class="font-bold text-white text-xl mb-2 premium-title">Add Medicine</h3>
@@ -247,8 +318,8 @@
                     </div>
                 </div>
             </button>
-            <button id="doctorBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+            <button id="doctorBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-purple-400 hover:to-pink-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-purple-400/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
                 <div class="relative z-10">
                     <div class="text-5xl mb-4 group-hover:bounce-in">👨‍⚕️</div>
                     <h3 class="font-bold text-white text-xl mb-2 premium-title">Doctor Connect</h3>
@@ -258,8 +329,8 @@
                     </div>
                 </div>
             </button>
-            <button id="profileBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+            <button id="profileBtn" class="premium-card card-shadow p-10 hover:shadow-2xl hover:scale-105 hover:glow transition-all duration-400 text-center group relative overflow-hidden hover:bg-gradient-to-br hover:from-orange-400 hover:to-red-500">
+                <div class="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-red-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
                 <div class="relative z-10">
                     <div class="text-5xl mb-4 group-hover:bounce-in">📋</div>
                     <h3 class="font-bold text-white text-xl mb-2 premium-title">Health Profile</h3>
@@ -650,7 +721,10 @@
         function renderMedicines() {
             const container = document.getElementById('medicineList');
             container.innerHTML = medicines.map(med => `
-                <div class="premium-card border border-white/10 p-6 ${med.taken ? 'bg-green-500/10 border-green-400/30' : 'bg-white/5'} hover:shadow-2xl transition-all duration-400 hover:scale-102 group cursor-pointer" onclick="expandMedicineCard(${med.id})">
+                <div class="premium-card border border-white/10 p-6 ${med.taken ? 'bg-green-500/10 border-green-400/30' : 'bg-white/5'} hover:shadow-2xl transition-all duration-400 hover:scale-102 group cursor-pointer hover:bg-gradient-to-br hover:from-purple-500/20 hover:via-pink-500/20 hover:to-orange-500/20 hover:border-purple-400/40 relative overflow-hidden" onclick="expandMedicineCard(${med.id})">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                    <div class="relative z-10">
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
                             <div class="flex items-center space-x-4">
@@ -674,11 +748,11 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <button onclick="event.stopPropagation(); runAISafetyCheck(${med.id})" class="premium-button px-4 py-2 rounded-xl text-xs transition-all duration-400 hover:scale-105 text-white">
+                            <button onclick="event.stopPropagation(); runAISafetyCheck(${med.id})" class="premium-button px-4 py-2 rounded-xl text-xs transition-all duration-400 hover:scale-105 text-white hover:bg-gradient-to-r hover:from-purple-500 hover:via-pink-500 hover:to-red-500 hover:shadow-lg hover:shadow-purple-500/50">
                                 🤖 AI Check
                             </button>
                             ${!med.taken ? `
-                                <button onclick="event.stopPropagation(); takeMedicine(${med.id})" class="premium-button px-6 py-3 rounded-xl text-sm transition-all duration-400 hover:scale-105 pulse-animation text-white font-semibold">
+                                <button onclick="event.stopPropagation(); takeMedicine(${med.id})" class="premium-button px-6 py-3 rounded-xl text-sm transition-all duration-400 hover:scale-105 pulse-animation text-white font-semibold hover:bg-gradient-to-r hover:from-green-400 hover:via-emerald-500 hover:to-teal-500 hover:shadow-xl hover:shadow-green-500/50">
                                     Take Now
                                 </button>
                             ` : `
@@ -706,6 +780,7 @@
                                 Remind
                             </button>
                         </div>
+                    </div>
                     </div>
                 </div>
             `).join('');
@@ -1373,5 +1448,5 @@
             }, 1000);
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97cf7202e0e84734',t:'MTc1NzUxMjc2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
